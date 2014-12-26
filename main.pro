@@ -1,8 +1,7 @@
 TEMPLATE = app
-TARGET =./targetFile 
+TARGET =./main 
 HEADERS += mainwindow.h \
 		mainview.h      \
-		uicircle.h      \
 		picview.h       \
 		uirectangle.h   \
 		uielement.h     \
@@ -11,7 +10,6 @@ HEADERS += mainwindow.h \
 
 SOURCES += mainwindow.cpp  \
 		mainview.cpp       \
-		uicircle.cpp       \
 		picview.cpp        \
 		uirectangle.cpp    \
 		uielement.cpp      \

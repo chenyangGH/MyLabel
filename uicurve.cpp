@@ -6,6 +6,7 @@ UiCurve::UiCurve(QWidget *parent):UiElement(parent)
 {
 	resize(parent->size());
 	activeColour = false;
+	setMouseTracking(true);
 }
 
 void UiCurve::change()
@@ -29,9 +30,8 @@ void UiCurve::paintEvent(QPaintEvent *)
 		painter.setPen(Qt::blue);
 	else 
 		painter.setPen(Qt::green);
-
 	QPainterPath curvePath;
 	curvePath.moveTo(points[0]);
-	curvePath.cubicTo(points[1], points[2], points[3]);
+	curvePath.cubicTo(points[2], points[3], points[1]);
 	painter.drawPath(curvePath);
 }

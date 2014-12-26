@@ -282,6 +282,8 @@ void PicView::mousePressEvent(QMouseEvent *event)
 				bezierPoint[3]->change(QPointF(ctrlPoint2.x() - 5.0, ctrlPoint2.y() - 5.0), QPointF(ctrlPoint2.x() + 5.0, ctrlPoint2.y() + 5.0));
 				bezierPoint[3]->show();
 
+				curve->change(bezierPoint[0],bezierPoint[1],bezierPoint[2],bezierPoint[3]);
+				curve->show();
 				cout<<"beginCenter: "<<beginCenter.x()<<"   "<<beginCenter.y()<<endl;
 				cout<<"endCenter: "<<endCenter.x()<<"   "<<endCenter.y()<<endl;
 				cout<<"ctrlPoint1: "<<ctrlPoint1.x()<<"   "<<ctrlPoint1.y()<<endl;
@@ -373,17 +375,17 @@ void PicView::mouseMoveEvent(QMouseEvent *event)
 			if(selectedBZPoint == 1)
 			{
 				bezierPoint[2]->change(QPointF(leftCurPos.x() - 5, leftCurPos.y() - 5), QPointF(leftCurPos.x() + 5, leftCurPos.y() + 5));
-				bezierPoint[2]->show();
-				curve->change(bezierPoint[0],bezierPoint[2],bezierPoint[3],bezierPoint[1]);
-				curve->show();
+				//bezierPoint[2]->show();
+				curve->change(bezierPoint[0],bezierPoint[1],bezierPoint[2],bezierPoint[3]);
+				//curve->show();
 				cout<<"bezierPoint[2]: "<<"leftUp: "<<bezierPoint[2]->leftUp().x()<<"  "<<bezierPoint[2]->leftUp().y()<<"rightDown: "<<bezierPoint[2]->rightDown().x()<<"  "<<bezierPoint[2]->rightDown().y()<<endl;
 			}
 			else if(selectedBZPoint == 2)
 			{
 				bezierPoint[3]->change(QPointF(leftCurPos.x() - 5, leftCurPos.y() - 5), QPointF(leftCurPos.x() + 5, leftCurPos.y() + 5));
-				bezierPoint[3]->show();
-				curve->change(bezierPoint[0],bezierPoint[2],bezierPoint[3],bezierPoint[1]);
-				curve->show();
+				//bezierPoint[3]->show();
+				curve->change(bezierPoint[0],bezierPoint[1],bezierPoint[2],bezierPoint[3]);
+				//curve->show();
 				cout<<"bezierPoint[3]: "<<"leftUp: "<<bezierPoint[3]->leftUp().x()<<"  "<<bezierPoint[3]->leftUp().y()<<"rightDown: "<<bezierPoint[3]->rightDown().x()<<"  "<<bezierPoint[3]->rightDown().y()<<endl;
 			}
 			else
@@ -395,14 +397,14 @@ void PicView::mouseMoveEvent(QMouseEvent *event)
 					selectedBZPoint = 1;
 					cout<<"selectedBZPoint is :"<<selectedBZPoint<<endl;
 					bezierPoint[2]->changeColour(true);
-					bezierPoint[2]->show();
+					//bezierPoint[2]->show();
 				}
 				else if(bezierPoint[3]->withinRect(leftCurPos))
 				{
 					selectedBZPoint = 2;
 					cout<<"selectedBZPoint is :"<<selectedBZPoint<<endl;
 					bezierPoint[3]->changeColour(true);
-					bezierPoint[3]->show();
+					//bezierPoint[3]->show();
 				}
 			}
 		}
@@ -414,21 +416,21 @@ void PicView::mouseMoveEvent(QMouseEvent *event)
 				selectedBZPoint = 1;
 				cout<<"selectedBZPoint is :"<<selectedBZPoint<<endl;
 				bezierPoint[2]->changeColour(true);
-				bezierPoint[2]->show();
+				//bezierPoint[2]->show();
 			}
 			else if(bezierPoint[3]->withinRect(leftCurPos))
 			{
 				selectedBZPoint = 2;
 				cout<<"selectedBZPoint is :"<<selectedBZPoint<<endl;
 				bezierPoint[3]->changeColour(true);
-				bezierPoint[3]->show();
+				//bezierPoint[3]->show();
 			}
 			else
 			{
 				bezierPoint[2]->changeColour(false);
-				bezierPoint[2]->show();
+				//bezierPoint[2]->show();
 				bezierPoint[3]->changeColour(false);
-				bezierPoint[3]->show();
+				//bezierPoint[3]->show();
 			}
 			cout<<"curleftpos :"<<leftCurPos.x()<<"  "<<leftCurPos.y()<<endl;
 			cout<<"bezierPoint[2]: "<<"leftUp: "<<bezierPoint[2]->leftUp().x()<<"  "<<bezierPoint[2]->leftUp().y()<<"rightDown: "<<bezierPoint[2]->rightDown().x()<<"  "<<bezierPoint[2]->rightDown().y()<<endl;
