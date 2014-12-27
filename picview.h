@@ -6,6 +6,7 @@
 class UiRectangle;
 class UiCoordinate;
 class UiCurve;
+class UiElement;
 class PicView : public QWidget
 {
 	Q_OBJECT
@@ -77,5 +78,6 @@ signals:
 		qreal shortDiameter;
 		qreal longDiameter;
 
+		UiElement* pElement;
 };
 #endif

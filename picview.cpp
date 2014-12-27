@@ -11,6 +11,7 @@ using std::cout;
 using std::endl;
 PicView::PicView(QWidget *parent) : QWidget(parent)
 {
+	pElement = NULL;
 	bezierSelected = true;
 	paraSelected = false;
 	rectSelected = false;
@@ -253,6 +254,7 @@ void PicView::mousePressEvent(QMouseEvent *event)
 	if(paraSelected)
 	{
 	}
+	pElement = NULL; 
 	if(bezierSelected)
 	{
 		if(event->button() == Qt::LeftButton)
@@ -287,66 +289,34 @@ void PicView::mousePressEvent(QMouseEvent *event)
 			}
 		}
 	}
+
 	if(rectSelected)
 	{
+		//rectangle->hide();
 		if(event->button() == Qt::LeftButton)
 		{
 			leftMouseDown = true;
-			edgeFocus = 0;
-			if(adjustRectangle)
+			if(endpointNum >= 2)
 			{
-				leftCurPos = event->pos();
-				switch(focus)
-				{
-					case 0:
-						//leftLeftUpPos = event->pos();
-						//adjustRectangle = false;
-						break;
-					case 1:
-						rectangle->LeftUpRect()->change(QPointF(leftCurPos.x() - 5, leftCurPos.y() - 5), QPointF(leftCurPos.x() + 5, leftCurPos.y() + 5));
-						rectangle->LeftUpRect()->show();
-						break;
-					case 2:
-						rectangle->RightDownRect()->change(QPointF(leftCurPos.x() - 5, leftCurPos.y() - 5), QPointF(leftCurPos.x() + 5, leftCurPos.y() + 5));
-						rectangle->RightDownRect()->show();
-						break;
-					case 3:
-						edgeFocus = 1;
-						break;
-					case 4:
-						edgeFocus = 2;
-						break;
-					case 5:
-						edgeFocus = 3;
-						break;
-					case 6:
-						edgeFocus = 4;
-						break;
-					default:
-						break;
-				}
-
+				return;
 			}
-			else
+			leftCurPos = event->pos();
+			rectangle->setFocus(endpointNum + 1);
+			rectangle->setFocusPoint(leftCurPos);
+
+			endpointNum++;
+			if(endpointNum == 2)
 			{
-				rectangle->LeftUpRect()->change(QPointF(0.0, 0.0), QPointF(0.0, 0.0));
-				rectangle->LeftUpRect()->show();
-				rectangle->RightDownRect()->change(QPointF(0.0, 0.0), QPointF(0.0, 0.0));
-				rectangle->RightDownRect()->show();
-				//leftLeftUpPos = event->pos();
+				
+				rectangle->change();
+				rectangle->show();
 			}
 		}
 		else if(event->button() == Qt::RightButton)
 		{
 			cleanUp();
-			adjustRectangle = false;
-		}
-		else
-		{
 		}
 	}
-
-	//mouseMoveEvent(event);
 }
 
 void PicView::mouseMoveEvent(QMouseEvent *event)
@@ -365,177 +335,81 @@ void PicView::mouseMoveEvent(QMouseEvent *event)
 	{
 		if(leftMouseDown == true)
 		{
-			if(selectedBZPoint == 1)
+			pElement = curve;
+			if(pElement->getFocus() < 1 || pElement->getFocus() > 4)
 			{
-				(curve->Points())[2]->change(QPointF(leftCurPos.x() - 5, leftCurPos.y() - 5), QPointF(leftCurPos.x() + 5, leftCurPos.y() + 5));
-				curve->change();
-			}
-			else if(selectedBZPoint == 2)
-			{
-				(curve->Points())[3]->change(QPointF(leftCurPos.x() - 5, leftCurPos.y() - 5), QPointF(leftCurPos.x() + 5, leftCurPos.y() + 5));
-				curve->change();
+				return;
 			}
 			else
 			{
-				cout<<"mousedown and selectedBZPoint = 0"<<endl;
-				selectedBZPoint = 0;
-				if((curve->Points())[2]->withinRect(leftCurPos))
-				{
-					selectedBZPoint = 1;
-					cout<<"selectedBZPoint is :"<<selectedBZPoint<<endl;
-					(curve->Points())[2]->changeColour(true);
-				}
-				else if((curve->Points())[3]->withinRect(leftCurPos))
-				{
-					selectedBZPoint = 2;
-					cout<<"selectedBZPoint is :"<<selectedBZPoint<<endl;
-					(curve->Points())[3]->changeColour(true);
-				}
+				cout<<"bezierSelected change point"<<endl;
+				pElement->setFocusPoint(leftCurPos);
+				pElement->change();
 			}
 		}
 		else
 		{
-			selectedBZPoint = 0;
-			if((curve->Points())[2]->withinRect(leftCurPos))
+			pElement = curve;
+			if((curve->Points())[0]->withinRect(leftCurPos))
 			{
-				selectedBZPoint = 1;
-				cout<<"selectedBZPoint is :"<<selectedBZPoint<<endl;
-				(curve->Points())[2]->changeColour(true);
+				pElement->setFocus(1);
+			}
+			else if((curve->Points())[1]->withinRect(leftCurPos))
+			{
+				pElement->setFocus(2);
+			}
+			else if((curve->Points())[2]->withinRect(leftCurPos))
+			{
+				pElement->setFocus(3);
 			}
 			else if((curve->Points())[3]->withinRect(leftCurPos))
 			{
-				selectedBZPoint = 2;
-				cout<<"selectedBZPoint is :"<<selectedBZPoint<<endl;
-				(curve->Points())[3]->changeColour(true);
+				pElement->setFocus(4);
 			}
 			else
 			{
-				(curve->Points())[2]->changeColour(false);
-				(curve->Points())[3]->changeColour(false);
+				pElement->setFocus(0);
+				pElement = NULL;
 			}
-			cout<<"curleftpos :"<<leftCurPos.x()<<"  "<<leftCurPos.y()<<endl;
 		}
-		cout<<"curleftpos :-------------"<<leftCurPos.x()<<"  "<<leftCurPos.y()<<endl;
 	}
-	cout<<"curleftpos :++++++++++--"<<leftCurPos.x()<<"  "<<leftCurPos.y()<<endl;
 	if(rectSelected)
 	{
-		static QPointF leftCurPosLast(0.0,0.0);
-		rectangle->changeColour(false);
-		char buffer[20];
-		sprintf(buffer, "X:%.f, Y:%.f", leftCurPos.x(), leftCurPos.y());
-		QString con(buffer);
-		coordinate->change(leftCurPos, QPointF(0.0, 0.0), con);
 		if(leftMouseDown == true)
 		{
-			QPointF tempLeftUp = leftLeftUpPos;
-			QPointF tempRightDown = leftRightDownPos;
-			if(adjustRectangle)
+			pElement = rectangle;
+			if(pElement->getFocus() < 1 || pElement->getFocus() > 2)
 			{
-				switch(focus)
-				{
-					case 1:
-						leftLeftUpPos = leftCurPos;
-						rectangle->LeftUpRect()->change(QPointF(leftCurPos.x() - 5, leftCurPos.y() - 5), QPointF(leftCurPos.x() + 5, leftCurPos.y() + 5));
-						break;
-					case 2:
-						leftRightDownPos = leftCurPos;
-						rectangle->RightDownRect()->change(QPointF(leftCurPos.x() - 3, leftCurPos.y() - 3), QPointF(leftCurPos.x() + 3, leftCurPos.y() + 3));
-						break;
-					case 3:
-						leftLeftUpPos.setX(leftCurPos.x());
-						break;
-					case 4:
-						leftLeftUpPos.setY(leftCurPos.y());
-						break;
-					case 5:
-						leftRightDownPos.setX(leftCurPos.x());
-						break;
-					case 6:
-						leftRightDownPos.setY(leftCurPos.y());
-						break;
-					default:
-						leftLeftUpPos = leftCurPos;
-						leftRightDownPos = leftCurPos;
-						adjustRectangle = false;
-						firstDownMove = false;
-						break;
-				}
+				cout<<"pElement is NULL"<<endl;
+				return;
 			}
 			else
 			{
-				if(firstDownMove)
-				{
-					leftLeftUpPos = leftCurPos;
-					leftRightDownPos = leftCurPos;
-					adjustRectangle = false;
-					firstDownMove = false;
-				}
-				else
-				{
-					leftRightDownPos = leftCurPos;
-				}
+				cout<<"rectSelected change point"<<endl;
+				pElement->setFocusPoint(leftCurPos);
+				pElement->change();
 			}
-			if(leftLeftUpPos.x() <= leftRightDownPos.x() && leftLeftUpPos.y() <= leftRightDownPos.y())
-			{
-				rectangle->change(leftLeftUpPos, leftRightDownPos);
-				rectangle->show();
-			}
-			else
-			{
-				leftLeftUpPos = tempLeftUp;
-				leftRightDownPos = tempRightDown;
-			}
-			//update
 		}
 		else
 		{
-			focus = 0;
-			QPointF point1 = rectangle->leftUp();
-			QPointF point2 = rectangle->rightDown();
-			int angleResult = rectangle->isAngle(leftCurPos);
-			int edgeResult = rectangle->belongToEdge(leftCurPos);
-			rectangle->LeftUpRect()->change(QPointF(0.0,0.0), QPointF(0.0, 0.0));
-			rectangle->RightDownRect()->change(QPointF(0.0,0.0), QPointF(0.0, 0.0));
-			if(angleResult != 0)
+			pElement = rectangle;
+			if(rectangle->LeftUpRect()->withinRect(leftCurPos))
 			{
-				if(angleResult == 1)
-				{
-					focus = 1;
-					rectangle->LeftUpRect()->change(QPointF(leftLeftUpPos.x() - 3, leftLeftUpPos.y() - 3), QPointF(leftLeftUpPos.x() + 3, leftLeftUpPos.y() + 3));
-				}
-				else
-				{
-					focus = 2;
-					rectangle->RightDownRect()->change(QPointF(leftRightDownPos.x() - 3, leftRightDownPos.y() - 3), QPointF(leftRightDownPos.x() + 3, leftRightDownPos.y() + 3));
-				}
+				pElement->setFocus(1);
 			}
-			else if(edgeResult != 0)
+			else if(rectangle->RightDownRect()->withinRect(leftCurPos))
 			{
-				//just change color and show
-				switch(edgeResult)
-				{
-					case 1:
-						focus = 3;
-						break;
-					case 2:
-						focus = 4;
-						break;
-					case 3:
-						focus = 5;
-						break;
-					case 4:
-						focus = 6;
-						break;
-					default:
-						break;
-				}
-				rectangle->changeColour(true);
+				pElement->setFocus(2);
+			}
+			else
+			{
+				pElement->setFocus(0);
+				pElement = NULL;
 			}
 		}
 	}
-
 }
+
 static inline float MyAbs(float a)
 {
 	return (a > 0 ? a : (0 - a));
@@ -546,6 +420,7 @@ void PicView::mouseReleaseEvent(QMouseEvent *event)
 	{
 		return;
 	}
+	leftMouseDown = false;
 	if(paraSelected)
 	{
 	}
@@ -594,7 +469,8 @@ bool PicView::loadImage(const QString s)
 		cleanUp();
 		update();
 		emit imageUnwrapped(&img);
-		rectangle->show();
+		//rectangle->show();
+		//first call show() function
 		rectangle->LeftUpRect()->show();
 		rectangle->RightDownRect()->show();
 		coordinate->show();

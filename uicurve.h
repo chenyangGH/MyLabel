@@ -38,6 +38,11 @@ class UiCurve : public UiElement
 		{
 			focusPoint = i;
 		}
+
+		int getFocus()
+		{
+			return focusPoint;
+		}
 		UiRectangle* pFocusPoint()
 		{
 			return pFocusPoint(focusPoint);

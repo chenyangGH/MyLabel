@@ -52,7 +52,13 @@ public:
 
 	void setFocus(int i)
 	{
+		std::cout<<"setFocus: "<<i<<std::endl;
 		focusPoint = i;
+	}
+		
+	int getFocus()
+	{
+		return focusPoint;
 	}
 
 	void setFocusPoint(int i, QPointF point)
@@ -62,7 +68,19 @@ public:
 	}
 	void setFocusPoint(QPointF point)
 	{
+		std::cout<<"current focusPoint is : "<<focusPoint<<std::endl;
 		*pFocusPoint() = point;
+		if(focusPoint == 1)
+		{
+			leftUpRect->change(QPointF(_leftUp.x() - 5, _leftUp.y() - 5), QPointF(_leftUp.x() + 5, _leftUp.y() + 5));
+		}
+		else if(focusPoint == 2)
+		{
+			rightDownRect->change(QPointF(_rightDown.x() - 5, _rightDown.y() - 5), QPointF(_rightDown.x() + 5, _rightDown.y() + 5));
+		}
+		else
+		{
+		}
 	}
 
 	QPointF* pFocusPoint()

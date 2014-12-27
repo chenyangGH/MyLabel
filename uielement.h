@@ -28,6 +28,7 @@ public:
     UiElement(QWidget *parent);
 	virtual void change(){};
 	virtual void setFocus(int i){};
+	virtual int getFocus(){};
 	virtual void setFocusPoint(int i, QPointF point){};
 	virtual void setFocusPoint(QPointF point){};
 public slots:
