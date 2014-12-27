@@ -26,6 +26,10 @@ class UiElement : public QWidget {
     Q_OBJECT
 public:
     UiElement(QWidget *parent);
+	virtual void change(){};
+	virtual void setFocus(int i){};
+	virtual void setFocusPoint(int i, QPointF point){};
+	virtual void setFocusPoint(QPointF point){};
 public slots:
     void callToResize(QSize newSize);
 };

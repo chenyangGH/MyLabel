@@ -18,7 +18,6 @@
  ****************************************************************************************/
 
 #include <QtGui>
-#include <iostream>
 #include "uirectangle.h"
 using std::cout;
 using std::endl;
@@ -72,6 +71,8 @@ void UiRectangle::paintEvent(QPaintEvent *) {
 void UiRectangle::change()
 {
 	_centre = QPointF(_leftUp.x() + (_rightDown.x() - _leftUp.x())/2.0,_leftUp.y() + (_rightDown.y() - _leftUp.y())/2.0);
+	_leftUp = leftUpRect->centre();
+	_rightDown = rightDownRect->centre();
     update();
 }
 void UiRectangle::change(QPointF leftUp, QPointF rightDown) {

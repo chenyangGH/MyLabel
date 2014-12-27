@@ -21,7 +21,7 @@
 #define UICIRCLE_H
 
 #include "uielement.h"
-
+#include <iostream>
 class UiRectangle : public UiElement {
     Q_OBJECT
 public:
@@ -47,6 +47,46 @@ public:
 	QPointF &rLeftUp(){return _leftUp;}
 	QPointF &RightDown(){return _rightDown;}
 
+	UiRectangle*& LeftUpRect(){return leftUpRect;}
+	UiRectangle*& RightDownRect(){return rightDownRect;}
+
+	void setFocus(int i)
+	{
+		focusPoint = i;
+	}
+
+	void setFocusPoint(int i, QPointF point)
+	{
+		setFocus(i);
+		setFocusPoint(point);
+	}
+	void setFocusPoint(QPointF point)
+	{
+		*pFocusPoint() = point;
+	}
+
+	QPointF* pFocusPoint()
+	{
+		return pFocusPoint(focusPoint);
+	}
+	QPointF* pFocusPoint(int i)
+	{
+		if(i == 1)
+		{
+			return &_leftUp;
+		}
+		else if(i == 2)
+		{
+			return &_rightDown;
+		}
+		else
+		{
+			std::cout<<"invalid parameter in UiRectangle::pFocusPoint(int i)"<<std::endl;
+			return NULL;
+		}
+	}
+
+
 protected:
 	void paintEvent(QPaintEvent *);
 private:
@@ -57,6 +97,11 @@ private:
 	// Whether the active colour (as opposed to the inactive colour
 	// should be set)
 	bool activeColour;
+
+	UiRectangle* leftUpRect;
+	UiRectangle* rightDownRect;
+	//indicate which point will change leftUp or rightDown
+	int focusPoint;
 };
 
 #endif // UICIRCLE_H
