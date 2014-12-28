@@ -43,16 +43,38 @@ void MainWindow::createActions() {
     connect(openAction, SIGNAL(triggered()),
             this, SLOT(open()));
 
+	bezierActionAdd = new QAction("add bezier curve", this);
+	connect(bezierActionAdd, SIGNAL(triggered()), this, SLOT(clickBezierActionAdd()));
+
+	bezierActionDel = new QAction("del bezier curve", this);
+	connect(bezierActionDel, SIGNAL(triggered()), this, SLOT(clickBezierActionDel()));
+/*
 	bezierAction = new QAction("bezier curve", this);
 	connect(bezierAction, SIGNAL(triggered()), this, SLOT(clickBezierAction()));
+	*/
 //	connect(this, SIGNAL(enableBezier(bool b)), bezierAction, SLOT(setEnable(bool b)));
 
+
+	paraActionAdd = new QAction("Add para curve", this);
+	connect(paraActionAdd, SIGNAL(triggered()), this, SLOT(clickParaActionAdd()));
+
+	paraActionDel = new QAction("Del para curve", this);
+	connect(paraActionDel, SIGNAL(triggered()), this, SLOT(clickParaActionDel()));
+/*
 	paraAction = new QAction("para curve", this);
 	connect(paraAction, SIGNAL(triggered()), this, SLOT(clickParaAction()));
+	*/
 //	connect(this, SIGNAL(enablePara(bool b)), paraAction, SLOT(setEnable(bool b)));
 
+	rectActionAdd = new QAction("Add rect curve", this);
+	connect(rectActionAdd, SIGNAL(triggered()), this, SLOT(clickRectActionAdd()));
+
+	rectActionDel = new QAction("del rect curve", this);
+	connect(rectActionDel, SIGNAL(triggered()), this, SLOT(clickRectActionDel()));
+/*
 	rectAction = new QAction("rect curve", this);
 	connect(rectAction, SIGNAL(triggered()), this, SLOT(clickRectAction()));
+	*/
 //	connect(this, SIGNAL(enableRect(bool b)), rectAction, SLOT(setEnable(bool b)));
     //preferencesAction = new QAction("&Preferences", this);
     //preferencesAction->setStatusTip("Edit preferences and settings.");
@@ -70,13 +92,25 @@ void MainWindow::createMenus() {
 
 
 	drawMenu = menuBar()->addMenu("&Draw Ways");
-	drawMenu->addAction(bezierAction);
-	drawMenu->addSeparator();
-	drawMenu->addAction(paraAction);
-	drawMenu->addSeparator();
-	drawMenu->addAction(rectAction);
-	drawMenu->addSeparator();
 
+	bezierMenu = drawMenu->addMenu("&bezier");
+	bezierMenu->addAction(bezierActionAdd);
+	bezierMenu->addSeparator();
+	bezierMenu->addAction(bezierActionDel);
+	bezierMenu->addSeparator();
+
+	paraMenu = drawMenu->addMenu("&para");
+	paraMenu->addAction(paraActionAdd);
+	paraMenu->addSeparator();
+	paraMenu->addAction(paraActionDel);
+	paraMenu->addSeparator();
+
+	rectMenu = drawMenu->addMenu("&rect");
+	rectMenu->addAction(rectActionAdd);
+	rectMenu->addSeparator();
+	rectMenu->addAction(rectActionDel);
+	rectMenu->addSeparator();
+	
 
     menuBar()->addSeparator();
 
@@ -101,36 +135,57 @@ void MainWindow::updateStatusBar() {
     // Change status
 }
 
+void MainWindow::clickBezierActionAdd()
+{
+	(mainView->view)->addBezier();
+}
+void MainWindow::clickBezierActionDel()
+{
+	(mainView->view)->delBezier();
+}
+void MainWindow::clickParaActionAdd()
+{
+	(mainView->view)->addPara();
+}
+void MainWindow::clickParaActionDel()
+{
+	(mainView->view)->delPara();
+}
+void MainWindow::clickRectActionAdd()
+{
+	(mainView->view)->addRect();
+}
+void MainWindow::clickRectActionDel()
+{
+	(mainView->view)->delRect();
+}
+/*
 void MainWindow::clickBezierAction()
 {
 	(mainView->view)->selectBezier();
-	/*
-	emit enableBezier(false);
-	emit enablePara(true);
-	emit enableRect(true);
-	*/
+	//emit enableBezier(false);
+	//emit enablePara(true);
+	//emit enableRect(true);
 }
-
+*/
+/*
 void MainWindow::clickParaAction()
 {
 	(mainView->view)->selectPara();
-	/*
-	emit enableBezier(true);
-	emit enablePara(false);
-	emit enableRect(true);
-	*/
+	//emit enableBezier(true);
+	//emit enablePara(false);
+	//emit enableRect(true);
 }
-
+*/
+/*
 void MainWindow::clickRectAction()
 {
 	(mainView->view)->selectRect();
-	/*
-	emit enableBezier(true);
-	emit enablePara(true);
-	emit enableRect(false);
-	*/
+	//emit enableBezier(true);
+	//emit enablePara(true);
+	//emit enableRect(false);
 }
-
+*/
 void MainWindow::open() {
     QString fileName = QFileDialog::getOpenFileName(this,
                                                     "Open Iris Image",

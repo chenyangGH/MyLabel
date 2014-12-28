@@ -45,9 +45,12 @@ private slots:
     void open();
     void updateStatusBar();
     void showAbout();
-	void clickBezierAction();
-	void clickParaAction();
-	void clickRectAction();
+	void clickBezierActionAdd();
+	void clickBezierActionDel();
+	void clickParaActionAdd();
+	void clickParaActionDel();
+	void clickRectActionAdd();
+	void clickRectActionDel();
 private:
     void createActions();
     void createMenus();
@@ -67,13 +70,20 @@ private:
 	
 	QMenu *drawMenu;
 
+	QMenu *bezierMenu;
+	QMenu *paraMenu;
+	QMenu *rectMenu;
+
     QAction *openAction;
     QAction *preferencesAction;
     QAction *aboutAction;
 
-	QAction *bezierAction;
-	QAction *paraAction;
-	QAction *rectAction;
+	QAction *bezierActionAdd;
+	QAction *bezierActionDel;
+	QAction *paraActionAdd;
+	QAction *paraActionDel;
+	QAction *rectActionAdd;
+	QAction *rectActionDel;
 
     QLabel *statusMessage;
 signals:

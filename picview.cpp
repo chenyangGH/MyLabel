@@ -16,18 +16,13 @@ PicView::PicView(QWidget *parent) : QWidget(parent)
 	paraSelected = false;
 	rectSelected = false;
 	endpointNum = 0;
-	selectedBZPoint = 0;
 
 	ignoreInput = true;
-	focus = 0;
 	edgeFocus = 0;
 	arcLength = 0;
 	leftArc = NULL;
 	rightArc = NULL;
-	firstDownMove = true;
 	leftMouseDown = false;
-	adjustRectangle = false;
-	cleared = true;
 
 	rectangle = new UiRectangle(this, QPointF(0.0, 0.0), QPointF(0.0,0.0));
 	rectangle->hide();
@@ -55,7 +50,51 @@ PicView::PicView(QWidget *parent) : QWidget(parent)
 	this->setFocusPolicy(Qt::StrongFocus);
 	setMouseTracking(true);
 }
-void PicView::selectBezier()
+
+UiCurve* PicView::addCurve()
+{
+	UiCurve* curve = new UiCurve(this);
+	curve->hide();
+	connect(this, SIGNAL(hasBeenResized(QSize)), curve, SLOT(callToResize(QSize)));
+	for(int i = 0; i < 4; i++)
+	{
+		(curve->Points())[i] = new UiRectangle(this, QPointF(0.0, 0.0), QPointF(0.0, 0.0));
+		(curve->Points())[i]->hide();
+		connect(this, SIGNAL(hasBeenResized(QSize)), (curve->Points())[i], SLOT(callToResize(QSize)));
+	}
+	return curve;
+}
+
+UiRectangle* PicView::addRectangle()
+{
+	rectangle = new UiRectangle(this, QPointF(0.0, 0.0), QPointF(0.0,0.0));
+	rectangle->hide();
+	rectangle->LeftUpRect() = new UiRectangle(this, QPointF(0.0, 0.0), QPointF(0.0, 0.0));
+	rectangle->LeftUpRect()->hide();
+	rectangle->RightDownRect() = new UiRectangle(this, QPointF(0.0, 0.0), QPointF(0.0, 0.0));
+	rectangle->RightDownRect()->hide();
+	connect(this, SIGNAL(hasBeenResized(QSize)), rectangle, SLOT(callToResize(QSize)));
+	connect(this, SIGNAL(hasBeenResized(QSize)), rectangle->LeftUpRect(), SLOT(callToResize(QSize)));
+	connect(this, SIGNAL(hasBeenResized(QSize)), rectangle->RightDownRect(), SLOT(callToResize(QSize)));
+	return rectangle;
+}
+
+void PicView::delCurve(UiCurve* curve)
+{
+	for(int i = 0; i < 4; i++)
+	{
+		(curve->Points())[i]->hide();
+		delete (curve->Points())[i];
+		(curve->Points())[i] = NULL;
+	}
+	curve->hide();
+	delete curve;
+	curve = NULL;
+}
+
+
+
+void PicView::addBezier()
 {
 	if(bezierSelected)
 	{
@@ -67,7 +106,7 @@ void PicView::selectBezier()
 	cout<<"selectBezier"<<endl;
 }
 
-void PicView::selectPara()
+void PicView::addPara()
 {
 	if(paraSelected)
 	{
@@ -79,7 +118,7 @@ void PicView::selectPara()
 	cout<<"selectPara"<<endl;
 }
 
-void PicView::selectRect()
+void PicView::addRect()
 {
 	if(rectSelected)
 	{
@@ -89,6 +128,18 @@ void PicView::selectRect()
 	paraSelected = false;
 	bezierSelected = false;
 	cout<<"selectRect"<<endl;
+}
+
+void PicView::delBezier()
+{
+}
+
+void PicView::delPara()
+{
+}
+
+void PicView::delRect()
+{
 }
 
 void PicView::computeArc()
@@ -251,12 +302,94 @@ void PicView::mousePressEvent(QMouseEvent *event)
 	{
 		return;
 	}
+	leftMouseDown = true;
 	if(paraSelected)
 	{
 	}
-	pElement = NULL; 
 	if(bezierSelected)
 	{
+		if(event->button() == Qt::LeftButton)
+		{
+			curve = addCurve();
+
+			leftCurPos = event->pos();
+			(curve->Points())[0]->change(QPointF(leftCurPos.x() - 5, leftCurPos.y() - 5), QPointF(leftCurPos.x() + 5, leftCurPos.y() + 5));
+			(curve->Points())[0]->show();
+			int xdist = 100;
+			(curve->Points())[1]->change(QPointF(leftCurPos.x() - 5 + xdist, leftCurPos.y() - 5), QPointF(leftCurPos.x() + 5 + xdist, leftCurPos.y() + 5));
+			(curve->Points())[1]->show();
+
+			QPointF beginCenter = (curve->Points())[0]->centre();
+			QPointF endCenter = (curve->Points())[1]->centre();
+			QPointF ctrlPoint1(beginCenter.x() + (endCenter.x() - beginCenter.x()) / 3.0, beginCenter.y() + (endCenter.y() - beginCenter.y()) / 3.0);
+			QPointF ctrlPoint2(beginCenter.x() + (endCenter.x() - beginCenter.x()) / 3.0 * 2.0, beginCenter.y() + (endCenter.y() - beginCenter.y()) / 3.0 * 2.0);
+			(curve->Points())[2]->change(QPointF(ctrlPoint1.x() - 5.0, ctrlPoint1.y() - 5.0), QPointF(ctrlPoint1.x() + 5.0, ctrlPoint1.y() + 5.0));
+			(curve->Points())[2]->show();
+			(curve->Points())[3]->change(QPointF(ctrlPoint2.x() - 5.0, ctrlPoint2.y() - 5.0), QPointF(ctrlPoint2.x() + 5.0, ctrlPoint2.y() + 5.0));
+			(curve->Points())[3]->show();
+
+			curve->change();
+			curve->show();
+
+			for(std::vector<UiCurve*>::iterator it = curveVector.begin(); it != curveVector.end(); it++)
+			{
+				(*it)->change();
+			}
+
+			for(std::vector<UiRectangle*>::iterator it = rectangleVector.begin(); it != rectangleVector.end(); it++)
+			{
+				(*it)->change();
+			}
+
+			curveVector.push_back(curve);
+		}
+		bezierSelected = false;
+	}
+	if(rectSelected)
+	{
+		if(event->button() == Qt::LeftButton)
+		{
+			leftCurPos = event->pos();
+			rectangle->setFocus(1);
+			rectangle->setFocusPoint(leftCurPos);
+			int xdist = 100;
+			int ydist = 100;
+			rectangle->setFocus(2);
+			rectangle->setFocusPoint(QPointF(leftCurPos.x() + xdist, leftCurPos.y() + ydist));
+
+			rectangle->change();
+			rectangle->show();
+
+			for(std::vector<UiCurve*>::iterator it = curveVector.begin(); it != curveVector.end(); it++)
+			{
+				(*it)->change();
+			}
+
+			for(std::vector<UiRectangle*>::iterator it = rectangleVector.begin(); it != rectangleVector.end(); it++)
+			{
+				(*it)->change();
+			}
+
+			rectangleVector.push_back(rectangle);
+		}
+		else
+		{
+		}
+		rectSelected = false;
+	}
+}
+/*
+   void PicView::mousePressEvent(QMouseEvent *event)
+   {
+   if(ignoreInput)
+   {
+   return;
+   }
+   if(paraSelected)
+   {
+   }
+   if(bezierSelected)
+   {
 		if(event->button() == Qt::LeftButton)
 		{
 			leftMouseDown = true;
@@ -264,7 +397,6 @@ void PicView::mousePressEvent(QMouseEvent *event)
 			{
 				return;
 			}
-			selectedBZPoint = 0;
 			leftCurPos = event->pos();
 			(curve->Points())[endpointNum]->change(QPointF(leftCurPos.x() - 5, leftCurPos.y() - 5), QPointF(leftCurPos.x() + 5, leftCurPos.y() + 5));
 			(curve->Points())[endpointNum]->show();
@@ -318,6 +450,7 @@ void PicView::mousePressEvent(QMouseEvent *event)
 		}
 	}
 }
+*/
 
 void PicView::mouseMoveEvent(QMouseEvent *event)
 {
@@ -328,27 +461,35 @@ void PicView::mouseMoveEvent(QMouseEvent *event)
 		return;
 	}
 	leftCurPos = event->pos();
-	if(paraSelected)
+
+	if(leftMouseDown == true)
 	{
-	}
-	if(bezierSelected)
-	{
-		if(leftMouseDown == true)
+		if(pElement == NULL)
 		{
-			pElement = curve;
-			if(pElement->getFocus() < 1 || pElement->getFocus() > 4)
-			{
-				return;
-			}
-			else
-			{
-				cout<<"bezierSelected change point"<<endl;
-				pElement->setFocusPoint(leftCurPos);
-				pElement->change();
-			}
+			return;
 		}
 		else
 		{
+
+			for(std::vector<UiCurve*>::iterator it = curveVector.begin(); it != curveVector.end(); it++)
+			{
+				(*it)->change();
+			}
+
+			for(std::vector<UiRectangle*>::iterator it = rectangleVector.begin(); it != rectangleVector.end(); it++)
+			{
+				(*it)->change();
+			}
+
+			pElement->setFocusPoint(leftCurPos);
+			pElement->change();
+		}
+	}
+	else
+	{
+		for(std::vector<UiCurve*>::iterator it = curveVector.begin(); it != curveVector.end(); it++)
+		{
+			curve = *it;
 			pElement = curve;
 			if((curve->Points())[0]->withinRect(leftCurPos))
 			{
@@ -368,30 +509,16 @@ void PicView::mouseMoveEvent(QMouseEvent *event)
 			}
 			else
 			{
-				pElement->setFocus(0);
 				pElement = NULL;
 			}
-		}
-	}
-	if(rectSelected)
-	{
-		if(leftMouseDown == true)
-		{
-			pElement = rectangle;
-			if(pElement->getFocus() < 1 || pElement->getFocus() > 2)
+			if(pElement != NULL)
 			{
-				cout<<"pElement is NULL"<<endl;
 				return;
 			}
-			else
-			{
-				cout<<"rectSelected change point"<<endl;
-				pElement->setFocusPoint(leftCurPos);
-				pElement->change();
-			}
 		}
-		else
+		for(std::vector<UiRectangle*>::iterator it = rectangleVector.begin(); it != rectangleVector.end(); it++)
 		{
+			rectangle = *it;
 			pElement = rectangle;
 			if(rectangle->LeftUpRect()->withinRect(leftCurPos))
 			{
@@ -403,8 +530,11 @@ void PicView::mouseMoveEvent(QMouseEvent *event)
 			}
 			else
 			{
-				pElement->setFocus(0);
 				pElement = NULL;
+			}
+			if(pElement != NULL)
+			{
+				return;
 			}
 		}
 	}
@@ -429,7 +559,6 @@ void PicView::mouseReleaseEvent(QMouseEvent *event)
 		if(event->button() == Qt::LeftButton)
 		{
 			leftMouseDown = false;
-			selectedBZPoint = 0;
 			cout<<"release"<<endl;
 			setMouseTracking(false);
 			setMouseTracking(true);
@@ -441,17 +570,14 @@ void PicView::mouseReleaseEvent(QMouseEvent *event)
 		cout<<"view BottomRight: "<<(rectangle->rect()).bottomRight().x()<<", "<<(rectangle->rect()).bottomRight().y()<<endl;
 		if(event->button() == Qt::LeftButton)
 		{
-			focus = 0;
 			QPointF point = event->pos();
 			if(MyAbs(point.x() - leftLeftUpPos.x()) < 1.0 && MyAbs(point.y() - leftLeftUpPos.y()) < 1.0)
 			{
 			}
 			else
 			{
-				adjustRectangle = true;
 			}
 			leftMouseDown = false;
-			firstDownMove = true;
 			emit PicFound();
 		}
 	}
@@ -480,19 +606,7 @@ void PicView::resizeEvent(QResizeEvent *e)
 {
 	emit hasBeenResized(e->size());
 }
-/*
-QPointF PicView::calcCircCentre(QPointF leftUp, QPointF rightDown)
-{
-}
 
-qreal PicView::calcLongDiameter(QPointF leftUp, QPointF rightDown)
-{
-}
-qreal PicView::calcShortDiameter(QPointF leftUp, QPointF rightDown)
-{
-
-}
-*/
 void PicView::cleanUp()
 {
 	rectangle->hide();

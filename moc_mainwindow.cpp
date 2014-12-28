@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.h'
 **
-** Created: Fri Dec 26 11:31:07 2014
+** Created: Sun Dec 28 20:47:07 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.1)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_MainWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       9,   14, // methods
+      12,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -40,8 +40,11 @@ static const uint qt_meta_data_MainWindow[] = {
       80,   11,   11,   11, 0x08,
       98,   11,   11,   11, 0x08,
      110,   11,   11,   11, 0x08,
-     130,   11,   11,   11, 0x08,
-     148,   11,   11,   11, 0x08,
+     133,   11,   11,   11, 0x08,
+     156,   11,   11,   11, 0x08,
+     177,   11,   11,   11, 0x08,
+     198,   11,   11,   11, 0x08,
+     219,   11,   11,   11, 0x08,
 
        0        // eod
 };
@@ -50,8 +53,9 @@ static const char qt_meta_stringdata_MainWindow[] = {
     "MainWindow\0\0disable\0enableBezier(bool)\0"
     "enablePara(bool)\0enableRect(bool)\0"
     "open()\0updateStatusBar()\0showAbout()\0"
-    "clickBezierAction()\0clickParaAction()\0"
-    "clickRectAction()\0"
+    "clickBezierActionAdd()\0clickBezierActionDel()\0"
+    "clickParaActionAdd()\0clickParaActionDel()\0"
+    "clickRectActionAdd()\0clickRectActionDel()\0"
 };
 
 void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -66,9 +70,12 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 3: _t->open(); break;
         case 4: _t->updateStatusBar(); break;
         case 5: _t->showAbout(); break;
-        case 6: _t->clickBezierAction(); break;
-        case 7: _t->clickParaAction(); break;
-        case 8: _t->clickRectAction(); break;
+        case 6: _t->clickBezierActionAdd(); break;
+        case 7: _t->clickBezierActionDel(); break;
+        case 8: _t->clickParaActionAdd(); break;
+        case 9: _t->clickParaActionDel(); break;
+        case 10: _t->clickRectActionAdd(); break;
+        case 11: _t->clickRectActionDel(); break;
         default: ;
         }
     }
@@ -106,9 +113,9 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 9)
+        if (_id < 12)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 9;
+        _id -= 12;
     }
     return _id;
 }
