@@ -56,6 +56,11 @@ UiRectangle::UiRectangle(QWidget *parent, QPointF leftUp, QPointF rightDown) : U
 	setCirColor(Qt::green);
 	setMouseTracking(true);
 }
+/*
+UiRectangle::~UiRectangle()
+{
+}
+*/
 
 void UiRectangle::paintEvent(QPaintEvent *) {
     QPainter painter(this);

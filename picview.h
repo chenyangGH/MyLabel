@@ -30,6 +30,7 @@ class PicView : public QWidget
 		UiCurve* addCurve();
 		void delCurve(UiCurve* curve);
 		UiRectangle* addRectangle();
+		void delRectangle(UiRectangle* rectangle);
 	protected:
 		void keyPressEvent(QKeyEvent  *event);
 		void paintEvent(QPaintEvent *);

@@ -107,19 +107,19 @@ first: all
 .SUFFIXES: .o .c .cpp .cc .cxx .C
 
 .cpp.o:
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o "$@" "$<"
+	$(CXX) -c -g $(CXXFLAGS) $(INCPATH) -o "$@" "$<"
 
 .cc.o:
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o "$@" "$<"
+	$(CXX) -c -g $(CXXFLAGS) $(INCPATH) -o "$@" "$<"
 
 .cxx.o:
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o "$@" "$<"
+	$(CXX) -c -g $(CXXFLAGS) $(INCPATH) -o "$@" "$<"
 
 .C.o:
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o "$@" "$<"
+	$(CXX) -c -g $(CXXFLAGS) $(INCPATH) -o "$@" "$<"
 
 .c.o:
-	$(CC) -c $(CFLAGS) $(INCPATH) -o "$@" "$<"
+	$(CC) -c -g $(CFLAGS) $(INCPATH) -o "$@" "$<"
 
 ####### Build rules
 

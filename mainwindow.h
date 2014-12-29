@@ -51,6 +51,7 @@ private slots:
 	void clickParaActionDel();
 	void clickRectActionAdd();
 	void clickRectActionDel();
+	void clickClearAll();
 private:
     void createActions();
     void createMenus();
@@ -85,6 +86,7 @@ private:
 	QAction *rectActionAdd;
 	QAction *rectActionDel;
 
+	QAction *clearAll;
     QLabel *statusMessage;
 signals:
 	void enableBezier(bool disable);

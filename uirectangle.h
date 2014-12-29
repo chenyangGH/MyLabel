@@ -28,6 +28,7 @@ class UiRectangle : public UiElement {
 public:
     UiRectangle(QWidget *parent, QPointF leftUp, QPointF rightDown);
 	UiRectangle(QWidget *parent);
+	//~UiRectangle();
 
     void change(QPointF leftUp, QPointF rightDown);
 	void change();

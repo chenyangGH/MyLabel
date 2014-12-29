@@ -48,11 +48,6 @@ void MainWindow::createActions() {
 
 	bezierActionDel = new QAction("del bezier curve", this);
 	connect(bezierActionDel, SIGNAL(triggered()), this, SLOT(clickBezierActionDel()));
-/*
-	bezierAction = new QAction("bezier curve", this);
-	connect(bezierAction, SIGNAL(triggered()), this, SLOT(clickBezierAction()));
-	*/
-//	connect(this, SIGNAL(enableBezier(bool b)), bezierAction, SLOT(setEnable(bool b)));
 
 
 	paraActionAdd = new QAction("Add para curve", this);
@@ -60,24 +55,15 @@ void MainWindow::createActions() {
 
 	paraActionDel = new QAction("Del para curve", this);
 	connect(paraActionDel, SIGNAL(triggered()), this, SLOT(clickParaActionDel()));
-/*
-	paraAction = new QAction("para curve", this);
-	connect(paraAction, SIGNAL(triggered()), this, SLOT(clickParaAction()));
-	*/
-//	connect(this, SIGNAL(enablePara(bool b)), paraAction, SLOT(setEnable(bool b)));
 
 	rectActionAdd = new QAction("Add rect curve", this);
 	connect(rectActionAdd, SIGNAL(triggered()), this, SLOT(clickRectActionAdd()));
 
 	rectActionDel = new QAction("del rect curve", this);
 	connect(rectActionDel, SIGNAL(triggered()), this, SLOT(clickRectActionDel()));
-/*
-	rectAction = new QAction("rect curve", this);
-	connect(rectAction, SIGNAL(triggered()), this, SLOT(clickRectAction()));
-	*/
-//	connect(this, SIGNAL(enableRect(bool b)), rectAction, SLOT(setEnable(bool b)));
-    //preferencesAction = new QAction("&Preferences", this);
-    //preferencesAction->setStatusTip("Edit preferences and settings.");
+
+	clearAll = new QAction("clear all", this);
+	connect(clearAll, SIGNAL(triggered()), this, SLOT(clickClearAll()));
 
 	aboutAction = new QAction(tr("&About"), this);
 	aboutAction->setStatusTip("Show the Iris Recognition About Box");
@@ -111,11 +97,11 @@ void MainWindow::createMenus() {
 	rectMenu->addAction(rectActionDel);
 	rectMenu->addSeparator();
 	
+	drawMenu->addSeparator();
+	drawMenu->addAction(clearAll);
 
     menuBar()->addSeparator();
 
-    //editMenu = menuBar()->addMenu("&Edit");
-    //editMenu->addAction(preferencesAction);
 
     menuBar()->addSeparator();
 
@@ -150,6 +136,10 @@ void MainWindow::clickParaActionAdd()
 void MainWindow::clickParaActionDel()
 {
 	(mainView->view)->delPara();
+}
+void MainWindow::clickClearAll()
+{
+	(mainView->view)->cleanUp();
 }
 void MainWindow::clickRectActionAdd()
 {

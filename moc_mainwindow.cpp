@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.h'
 **
-** Created: Sun Dec 28 20:47:07 2014
+** Created: Mon Dec 29 07:32:09 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.1)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_MainWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      12,   14, // methods
+      13,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -45,6 +45,7 @@ static const uint qt_meta_data_MainWindow[] = {
      177,   11,   11,   11, 0x08,
      198,   11,   11,   11, 0x08,
      219,   11,   11,   11, 0x08,
+     240,   11,   11,   11, 0x08,
 
        0        // eod
 };
@@ -56,6 +57,7 @@ static const char qt_meta_stringdata_MainWindow[] = {
     "clickBezierActionAdd()\0clickBezierActionDel()\0"
     "clickParaActionAdd()\0clickParaActionDel()\0"
     "clickRectActionAdd()\0clickRectActionDel()\0"
+    "clickClearAll()\0"
 };
 
 void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -76,6 +78,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 9: _t->clickParaActionDel(); break;
         case 10: _t->clickRectActionAdd(); break;
         case 11: _t->clickRectActionDel(); break;
+        case 12: _t->clickClearAll(); break;
         default: ;
         }
     }
@@ -113,9 +116,9 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 12)
+        if (_id < 13)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 12;
+        _id -= 13;
     }
     return _id;
 }
