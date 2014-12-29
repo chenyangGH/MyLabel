@@ -45,26 +45,36 @@ static inline bool between(float mid, float low, float high)
 UiRectangle::UiRectangle(QWidget *parent) : UiElement(parent){
     resize(parent->size());
 	activeColour = false;
+	setRecColor(Qt::blue);
+	setCirColor(Qt::green);
 	setMouseTracking(true);
 }
 UiRectangle::UiRectangle(QWidget *parent, QPointF leftUp, QPointF rightDown) : UiElement(parent), _leftUp(leftUp), _rightDown(rightDown) {
     resize(parent->size());
 	activeColour = false;
+	setRecColor(Qt::blue);
+	setCirColor(Qt::green);
 	setMouseTracking(true);
 }
 
 void UiRectangle::paintEvent(QPaintEvent *) {
     QPainter painter(this);
+	/*
 	if(activeColour)
 		painter.setPen(Qt::blue);
 	else 
 		painter.setPen(Qt::green);
+		*/
+	painter.setPen(recColor);
 	painter.drawRect(QRectF(_leftUp, _rightDown));
 	activeColour = !activeColour;
+	/*
 	if(activeColour)
 		painter.setPen(Qt::blue);
 	else 
 		painter.setPen(Qt::green);
+		*/
+	painter.setPen(cirColor);
 	painter.drawEllipse(QRectF(_leftUp, _rightDown));
 	activeColour = !activeColour;
 }

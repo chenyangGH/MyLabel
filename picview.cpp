@@ -23,20 +23,22 @@ PicView::PicView(QWidget *parent) : QWidget(parent)
 	leftArc = NULL;
 	rightArc = NULL;
 	leftMouseDown = false;
-
+/*
 	rectangle = new UiRectangle(this, QPointF(0.0, 0.0), QPointF(0.0,0.0));
 	rectangle->hide();
 	rectangle->LeftUpRect() = new UiRectangle(this, QPointF(0.0, 0.0), QPointF(0.0, 0.0));
 	rectangle->LeftUpRect()->hide();
 	rectangle->RightDownRect() = new UiRectangle(this, QPointF(0.0, 0.0), QPointF(0.0, 0.0));
 	rectangle->RightDownRect()->hide();
+	*/
 
 	coordinate = new UiCoordinate(this, QPointF(0.0, 0.0), QPointF(0.0, 0.0));
-	connect(this, SIGNAL(hasBeenResized(QSize)), rectangle, SLOT(callToResize(QSize)));
-	connect(this, SIGNAL(hasBeenResized(QSize)), rectangle->LeftUpRect(), SLOT(callToResize(QSize)));
-	connect(this, SIGNAL(hasBeenResized(QSize)), rectangle->RightDownRect(), SLOT(callToResize(QSize)));
+	//connect(this, SIGNAL(hasBeenResized(QSize)), rectangle, SLOT(callToResize(QSize)));
+	//connect(this, SIGNAL(hasBeenResized(QSize)), rectangle->LeftUpRect(), SLOT(callToResize(QSize)));
+	//connect(this, SIGNAL(hasBeenResized(QSize)), rectangle->RightDownRect(), SLOT(callToResize(QSize)));
 	connect(this, SIGNAL(hasBeenResized(QSize)), coordinate, SLOT(callToResize(QSize)));
 /////create curve///////////////////
+	/*
 	curve = new UiCurve(this);
 	curve->hide();
 	connect(this, SIGNAL(hasBeenResized(QSize)), curve, SLOT(callToResize(QSize)));
@@ -46,6 +48,7 @@ PicView::PicView(QWidget *parent) : QWidget(parent)
 		(curve->Points())[i]->hide();
 		connect(this, SIGNAL(hasBeenResized(QSize)), (curve->Points())[i], SLOT(callToResize(QSize)));
 	}
+	*/
 /////create curve///////////////////
 	this->setFocusPolicy(Qt::StrongFocus);
 	setMouseTracking(true);
@@ -60,6 +63,9 @@ UiCurve* PicView::addCurve()
 	{
 		(curve->Points())[i] = new UiRectangle(this, QPointF(0.0, 0.0), QPointF(0.0, 0.0));
 		(curve->Points())[i]->hide();
+		(curve->Points())[i]->setCirColor(Qt::yellow);
+		(curve->Points())[i]->setRecColor(Qt::yellow);
+
 		connect(this, SIGNAL(hasBeenResized(QSize)), (curve->Points())[i], SLOT(callToResize(QSize)));
 	}
 	return curve;
@@ -71,8 +77,12 @@ UiRectangle* PicView::addRectangle()
 	rectangle->hide();
 	rectangle->LeftUpRect() = new UiRectangle(this, QPointF(0.0, 0.0), QPointF(0.0, 0.0));
 	rectangle->LeftUpRect()->hide();
+	rectangle->LeftUpRect()->setRecColor(Qt::red);
+	rectangle->LeftUpRect()->setCirColor(Qt::red);
 	rectangle->RightDownRect() = new UiRectangle(this, QPointF(0.0, 0.0), QPointF(0.0, 0.0));
 	rectangle->RightDownRect()->hide();
+	rectangle->RightDownRect()->setRecColor(Qt::red);
+	rectangle->RightDownRect()->setCirColor(Qt::red);
 	connect(this, SIGNAL(hasBeenResized(QSize)), rectangle, SLOT(callToResize(QSize)));
 	connect(this, SIGNAL(hasBeenResized(QSize)), rectangle->LeftUpRect(), SLOT(callToResize(QSize)));
 	connect(this, SIGNAL(hasBeenResized(QSize)), rectangle->RightDownRect(), SLOT(callToResize(QSize)));
@@ -349,6 +359,7 @@ void PicView::mousePressEvent(QMouseEvent *event)
 	{
 		if(event->button() == Qt::LeftButton)
 		{
+			rectangle = addRectangle();
 			leftCurPos = event->pos();
 			rectangle->setFocus(1);
 			rectangle->setFocusPoint(leftCurPos);
@@ -357,6 +368,8 @@ void PicView::mousePressEvent(QMouseEvent *event)
 			rectangle->setFocus(2);
 			rectangle->setFocusPoint(QPointF(leftCurPos.x() + xdist, leftCurPos.y() + ydist));
 
+			rectangle->LeftUpRect()->show();
+			rectangle->RightDownRect()->show();
 			rectangle->change();
 			rectangle->show();
 
@@ -592,13 +605,17 @@ bool PicView::loadImage(const QString s)
 			return false;
 		}
 		resize(img.rect().width(), img.rect().height());
-		cleanUp();
+		//cleanUp();
+		if(!img.isNull())
+		{
+			ignoreInput = false;
+		}
 		update();
 		emit imageUnwrapped(&img);
 		//rectangle->show();
 		//first call show() function
-		rectangle->LeftUpRect()->show();
-		rectangle->RightDownRect()->show();
+		//rectangle->LeftUpRect()->show();
+		//rectangle->RightDownRect()->show();
 		coordinate->show();
 	}
 }

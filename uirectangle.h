@@ -22,6 +22,7 @@
 
 #include "uielement.h"
 #include <iostream>
+#include <QtGui>
 class UiRectangle : public UiElement {
     Q_OBJECT
 public:
@@ -104,6 +105,14 @@ public:
 		}
 	}
 
+	void setRecColor(Qt::GlobalColor color)
+	{
+		recColor = color;
+	}
+	void setCirColor(Qt::GlobalColor color)
+	{
+		cirColor = color;
+	}
 
 protected:
 	void paintEvent(QPaintEvent *);
@@ -115,7 +124,8 @@ private:
 	// Whether the active colour (as opposed to the inactive colour
 	// should be set)
 	bool activeColour;
-
+	Qt::GlobalColor recColor;
+	Qt::GlobalColor cirColor;
 	UiRectangle* leftUpRect;
 	UiRectangle* rightDownRect;
 	//indicate which point will change leftUp or rightDown
