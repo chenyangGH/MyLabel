@@ -20,7 +20,7 @@ class UiCurve : public UiElement
 		}
 		void setFocusPoint(QPointF point)
 		{
-			points[focusPoint - 1]->change(QPointF(point.x() - 5, point.y() - 5), QPointF(point.x() + 5, point.y() + 5));
+			points[focusPoint - 1]->change(QPointF(point.x() - 3, point.y() - 3), QPointF(point.x() + 3, point.y() + 3));
 		}
 		UiRectangle* pFocusPoint(int i)
 		{

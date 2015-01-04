@@ -11,6 +11,7 @@ using std::cout;
 using std::endl;
 PicView::PicView(QWidget *parent) : QWidget(parent)
 {
+	picNum = 0;
 	pElement = NULL;
 	bezierSelected = true;
 	paraSelected = false;
@@ -144,7 +145,74 @@ void PicView::delPara()
 {
 }
 
+int PicView::doCompute(QWidget *pWidget, char *fileName)
+{
+	if(fileName == NULL)
+	{
+		cout<<"fileName is a null string"<<endl;
+		return 0;
+	}
+	FILE *out;
+	out = fopen(fileName, "w");
+	if(out == NULL)
+	{
+		cout<<"open file error"<<endl;
+		exit(0);
+	}
 
+	QPixmap ellipse = QPixmap::grabWidget(rectangle, rectangle->rect());
+	QImage image = ellipse.toImage();
+
+	for(int i = 0; i < image.height(); i++)
+	{
+		int fj = 0;
+		int bj = image.width() - 1;
+		for(int j = 0; j < image.width(); j++)
+		{
+			QRgb rgb = image.pixel(j, i);
+			if(qBlue(rgb) == 0 && qRed(rgb) == 0 && qGreen(rgb) >= 250)
+			{
+				fj = j;
+				break;
+			}
+		}
+		
+		for(int k = image.width() - 1; k >= 0; k--)
+		{
+			QRgb rgb = image.pixel(k, i);
+			if(qBlue(rgb) == 0 && qRed(rgb) == 0 && qGreen(rgb) >= 250)
+			{
+				bj = k;
+				//care
+				fprintf(out, "%d,%d,%d\n", i, fj, bj);
+				break;
+			}
+		}
+	}
+	fclose(out);
+}
+
+void PicView::computeArc()
+{
+	/*
+	for(std::vector<UiRectangle*>::iterator it = rectangleVector.begin(); it != rectangleVector.end(); it++)
+	{
+		if(doCompute(*it, name) == 0)
+		{
+			exit(0);
+		}
+	}
+
+	for(std::vector<UiCurve*>::iterator it = curveVector.begin(); it != curveVector.end(); it++)
+	{
+		if(doCompute(*it, name) == 0)
+		{
+			exit(0);
+		}
+	}
+	*/
+}
+/*
 void PicView::computeArc()
 {
 	if(leftArc != NULL)
@@ -220,6 +288,7 @@ void PicView::computeArc()
 	leftArc = NULL;
 	rightArc = NULL;
 }
+*/
 void PicView::keyPressEvent(QKeyEvent *event)
 {
 	int key = event->key();
@@ -315,19 +384,19 @@ void PicView::mousePressEvent(QMouseEvent *event)
 			curve = addCurve();
 
 			leftCurPos = event->pos();
-			(curve->Points())[0]->change(QPointF(leftCurPos.x() - 5, leftCurPos.y() - 5), QPointF(leftCurPos.x() + 5, leftCurPos.y() + 5));
+			(curve->Points())[0]->change(QPointF(leftCurPos.x() - 3, leftCurPos.y() - 3), QPointF(leftCurPos.x() + 3, leftCurPos.y() + 3));
 			(curve->Points())[0]->show();
 			int xdist = 100;
-			(curve->Points())[1]->change(QPointF(leftCurPos.x() - 5 + xdist, leftCurPos.y() - 5), QPointF(leftCurPos.x() + 5 + xdist, leftCurPos.y() + 5));
+			(curve->Points())[1]->change(QPointF(leftCurPos.x() - 3 + xdist, leftCurPos.y() - 3), QPointF(leftCurPos.x() + 3 + xdist, leftCurPos.y() + 3));
 			(curve->Points())[1]->show();
 
 			QPointF beginCenter = (curve->Points())[0]->centre();
 			QPointF endCenter = (curve->Points())[1]->centre();
 			QPointF ctrlPoint1(beginCenter.x() + (endCenter.x() - beginCenter.x()) / 3.0, beginCenter.y() + (endCenter.y() - beginCenter.y()) / 3.0);
 			QPointF ctrlPoint2(beginCenter.x() + (endCenter.x() - beginCenter.x()) / 3.0 * 2.0, beginCenter.y() + (endCenter.y() - beginCenter.y()) / 3.0 * 2.0);
-			(curve->Points())[2]->change(QPointF(ctrlPoint1.x() - 5.0, ctrlPoint1.y() - 5.0), QPointF(ctrlPoint1.x() + 5.0, ctrlPoint1.y() + 5.0));
+			(curve->Points())[2]->change(QPointF(ctrlPoint1.x() - 3.0, ctrlPoint1.y() - 3.0), QPointF(ctrlPoint1.x() + 3.0, ctrlPoint1.y() + 3.0));
 			(curve->Points())[2]->show();
-			(curve->Points())[3]->change(QPointF(ctrlPoint2.x() - 5.0, ctrlPoint2.y() - 5.0), QPointF(ctrlPoint2.x() + 5.0, ctrlPoint2.y() + 5.0));
+			(curve->Points())[3]->change(QPointF(ctrlPoint2.x() - 3.0, ctrlPoint2.y() - 3.0), QPointF(ctrlPoint2.x() + 3.0, ctrlPoint2.y() + 3.0));
 			(curve->Points())[3]->show();
 
 			curve->change();

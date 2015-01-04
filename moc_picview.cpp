@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'picview.h'
 **
-** Created: Mon Dec 29 02:08:07 2014
+** Created: Tue Dec 30 03:47:44 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.1)
 **
 ** WARNING! All changes made in this file will be lost!

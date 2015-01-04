@@ -31,6 +31,7 @@ class PicView : public QWidget
 		void delCurve(UiCurve* curve);
 		UiRectangle* addRectangle();
 		void delRectangle(UiRectangle* rectangle);
+		int doCompute(QWidget *pWidget, char *fileName);
 	protected:
 		void keyPressEvent(QKeyEvent  *event);
 		void paintEvent(QPaintEvent *);
@@ -59,6 +60,7 @@ signals:
 		QPointF leftRightDownPos;
 		UiRectangle *rectangle;
 
+
 		UiCurve *curve;
 
 		int endpointNum;
@@ -70,5 +72,7 @@ signals:
 		UiElement* pElement;
 		std::vector<UiCurve*> curveVector;
 		std::vector<UiRectangle*> rectangleVector;
+
+		int picNum;
 };
 #endif

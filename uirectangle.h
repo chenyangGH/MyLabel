@@ -74,11 +74,11 @@ public:
 		*pFocusPoint() = point;
 		if(focusPoint == 1)
 		{
-			leftUpRect->change(QPointF(_leftUp.x() - 5, _leftUp.y() - 5), QPointF(_leftUp.x() + 5, _leftUp.y() + 5));
+			leftUpRect->change(QPointF(_leftUp.x() - 3, _leftUp.y() - 3), QPointF(_leftUp.x() + 3, _leftUp.y() + 3));
 		}
 		else if(focusPoint == 2)
 		{
-			rightDownRect->change(QPointF(_rightDown.x() - 5, _rightDown.y() - 5), QPointF(_rightDown.x() + 5, _rightDown.y() + 5));
+			rightDownRect->change(QPointF(_rightDown.x() - 3, _rightDown.y() - 3), QPointF(_rightDown.x() + 3, _rightDown.y() + 3));
 		}
 		else
 		{

@@ -38,7 +38,7 @@ class MainView : public QWidget
     friend class MainWindow;
 public:
     MainView(QWidget *parent);
-    bool loadImage(QString fileName);
+    bool loadImageList(QString directoryName);
 
 
 public slots:
@@ -48,6 +48,10 @@ public slots:
     void resizePicBox(QSize newSize);
     void cleanedUp();
 	void on_makeSureButton_clicked();
+	void on_addBezButton_clicked();
+	void on_addRecButton_clicked();
+	void on_addParaButton_clicked();
+	void on_clearAllButton_clicked();
 
 protected:
     void changeNotes(const QString &string);
@@ -61,11 +65,16 @@ private:
     PicView *view;
     QPixmap *altImg;
 	QPushButton *makeSureButton;
+	QPushButton *addBezButton;
+	QPushButton *addRecButton;
+	QPushButton *addParaButton;
+	QPushButton *clearAllButton;
     QLabel *notes;
     QVBoxLayout *sideLayout;
     QVBoxLayout *leftLayout;
     QHBoxLayout *mainLayout;
     QTabWidget *bottomBox;
+	vector<std::string> fileList;
 };
 
 #endif // MAINVIEW_H

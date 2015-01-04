@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'uicurve.h'
 **
-** Created: Mon Dec 29 02:08:11 2014
+** Created: Mon Dec 29 19:58:42 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.1)
 **
 ** WARNING! All changes made in this file will be lost!

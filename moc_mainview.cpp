@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainview.h'
 **
-** Created: Mon Dec 29 02:08:06 2014
+** Created: Tue Dec 30 00:51:02 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.1)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_MainView[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       5,   14, // methods
+       9,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -36,6 +36,10 @@ static const uint qt_meta_data_MainView[] = {
       58,   50,    9,    9, 0x0a,
       78,    9,    9,    9, 0x0a,
       90,    9,    9,    9, 0x0a,
+     118,    9,    9,    9, 0x0a,
+     144,    9,    9,    9, 0x0a,
+     170,    9,    9,    9, 0x0a,
+     197,    9,    9,    9, 0x0a,
 
        0        // eod
 };
@@ -45,6 +49,10 @@ static const char qt_meta_stringdata_MainView[] = {
     "imageUnwrapped(QImage*)\0newSize\0"
     "resizePicBox(QSize)\0cleanedUp()\0"
     "on_makeSureButton_clicked()\0"
+    "on_addBezButton_clicked()\0"
+    "on_addRecButton_clicked()\0"
+    "on_addParaButton_clicked()\0"
+    "on_clearAllButton_clicked()\0"
 };
 
 void MainView::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -58,6 +66,10 @@ void MainView::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         case 2: _t->resizePicBox((*reinterpret_cast< QSize(*)>(_a[1]))); break;
         case 3: _t->cleanedUp(); break;
         case 4: _t->on_makeSureButton_clicked(); break;
+        case 5: _t->on_addBezButton_clicked(); break;
+        case 6: _t->on_addRecButton_clicked(); break;
+        case 7: _t->on_addParaButton_clicked(); break;
+        case 8: _t->on_clearAllButton_clicked(); break;
         default: ;
         }
     }
@@ -95,9 +107,9 @@ int MainView::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 5)
+        if (_id < 9)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 5;
+        _id -= 9;
     }
     return _id;
 }

@@ -51,8 +51,13 @@ MainView::MainView(QWidget *parent) : QWidget(parent) {
     view = new PicView(PicBox);
     view->setGeometry(4,4,320,280);
     connect(view, SIGNAL(hasBeenResized(QSize)), this, SLOT(resizePicBox(QSize)));
-	makeSureButton = new QPushButton("&Save", sideBox);
+	makeSureButton = new QPushButton("&Save and next", sideBox);
 	makeSureButton->setEnabled(false);
+
+	addBezButton = new QPushButton("&add bezier", sideBox);
+	addRecButton = new QPushButton("&add rect", sideBox);
+	addParaButton = new QPushButton("&add para", sideBox);
+	clearAllButton = new QPushButton("&clearAll", sideBox);
 	
     notes = new QLabel("Use the File menu to load an iris image.", sideBox);
     notes->setWordWrap(true);
@@ -67,6 +72,10 @@ MainView::MainView(QWidget *parent) : QWidget(parent) {
     sideLayout->addWidget(notes);
     sideLayout->addStretch();
     sideLayout->addWidget(makeSureButton);
+    sideLayout->addWidget(addBezButton);
+    sideLayout->addWidget(addRecButton);
+    sideLayout->addWidget(addParaButton);
+	sideLayout->addWidget(clearAllButton);
     leftLayout = new QVBoxLayout(leftWidget);
     leftLayout->addWidget(PicBox);
     leftLayout->addStretch();
@@ -85,17 +94,51 @@ MainView::MainView(QWidget *parent) : QWidget(parent) {
     connect(view, SIGNAL(cleanedUp()), this, SLOT(cleanedUp()));
     connect(makeSureButton, SIGNAL(clicked()), this, SLOT(on_makeSureButton_clicked()));
 
+    connect(addBezButton, SIGNAL(clicked()), this, SLOT(on_addBezButton_clicked()));
+    connect(addRecButton, SIGNAL(clicked()), this, SLOT(on_addRecButton_clicked()));
+    connect(addParaButton, SIGNAL(clicked()), this, SLOT(on_addParaButton_clicked()));
+    connect(clearAllButton, SIGNAL(clicked()), this, SLOT(on_clearAllButton_clicked()));
+
     setLayout(mainLayout);
 	resize(sizeHint().width(), sizeHint().height() + 150);
 	parent->resize(size());
 }
+void MainView::on_addBezButton_clicked()
+{
+	view->addBezier();
+}
+void MainView::on_addRecButton_clicked()
+{
+	view->addRect();
+}
+void MainView::on_addParaButton_clicked()
+{
+	view->addPara();
+}
+void MainView::on_clearAllButton_clicked()
+{
+	view->cleanUp();
+}
 void MainView::on_makeSureButton_clicked()
 {
+	/*
 	QPointF leftUp = view->getLeftTopLeft();
 	QPointF rightDown = view->getLeftBottomRight();
 	cout<<"leftup_X: "<<leftUp.x()<<"   leftUp_Y: "<<leftUp.y()<<endl;
 	cout<<"rightDown_X: "<<rightDown.x()<<"   rightDown_Y: "<<rightDown.y()<<endl;
+	*/
 	view->computeArc();
+	if(fileList.empty())
+	{
+		std::cout<<"last image in this directory"<<endl;
+		makeSureButton->setEnabled(false);
+	}
+	else
+	{
+		std::string fileName = fileList.back();
+		fileList.pop_back();
+		view->loadImage((char*)fileName.c_str());
+	}
 }
 void MainView::changeNotes(const QString &string) {
     notes->setText(string);
@@ -127,8 +170,18 @@ void MainView::enableButtons() {
 	makeSureButton->setEnabled(true);
 }
 
-bool MainView::loadImage(QString fullFileName) {
+bool MainView::loadImageList(QString directoryName) {
 	bool result = false;
+	////////////////////////////////
+	loadImage();
+	////////////////////////////////
+	if(fileList.empty())
+	{
+		std::cout<<"there is no image in this directory"<<endl;
+		return false;
+	}
+	fullFileName = fileList.back();
+	fileList.pop_back();
 	curFile = QFileInfo(fullFileName).fileName();
 	result = view->loadImage(fullFileName);
 	return result;

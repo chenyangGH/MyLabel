@@ -18,6 +18,8 @@
  ****************************************************************************************/
 
 #include <QtGui>
+#include <QFileDialog>
+#include <iostream>
 #include "mainwindow.h"
 #include "picview.h"
 #include "mainview.h"
@@ -177,17 +179,23 @@ void MainWindow::clickRectAction()
 }
 */
 void MainWindow::open() {
-    QString fileName = QFileDialog::getOpenFileName(this,
-                                                    "Open Iris Image",
-                                                    ".",
+	/*
                                                     "Iris images (*.bmp)\nAll files (*.*)");
     if (!fileName.isEmpty())
         loadFile(fileName);
-
+*/
+	QFileDialog *fd=new QFileDialog(this,"file dlg");
+	if(fd->exec()==QFileDialog::Accepted) // ok
+	{
+		QString file=(fd->directory()).absolutePath();
+		std::cout<<file.toStdString()<<std::endl;
+		if (!fileName.isEmpty())
+			loadFile(file.toStdString());
+	}
 }
 
 bool MainWindow::loadFile(const QString &fileName) {
-    if(!mainView->loadImage(fileName)) {
+	if(!mainView->loadImageList(fileName)) {
             statusBar()->showMessage("Load failed!", 2000);
             return false;
     }
