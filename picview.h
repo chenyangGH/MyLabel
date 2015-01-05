@@ -18,7 +18,7 @@ class PicView : public QWidget
 		QPointF getLeftBottomRight(){return leftRightDownPos;}
 		void setLeftArc(QPointF * pointer){leftArc = pointer; }
 		void setRightArc(QPointF * pointer){rightArc = pointer; }
-		void computeArc();
+		void computeArc(const QString &filename);
 
 		void addBezier();
 		void addPara();
@@ -31,7 +31,7 @@ class PicView : public QWidget
 		void delCurve(UiCurve* curve);
 		UiRectangle* addRectangle();
 		void delRectangle(UiRectangle* rectangle);
-		int doCompute(QWidget *pWidget, char *fileName);
+		int doCompute(QWidget *pWidget, const char *fileName);
 	protected:
 		void keyPressEvent(QKeyEvent  *event);
 		void paintEvent(QPaintEvent *);

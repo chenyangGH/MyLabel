@@ -189,18 +189,19 @@ void MainWindow::open() {
 	{
 		QString file=(fd->directory()).absolutePath();
 		std::cout<<file.toStdString()<<std::endl;
-		if (!fileName.isEmpty())
-			loadFile(file.toStdString());
+		if (!file.isEmpty())
+			loadFile(file);
 	}
 }
 
 bool MainWindow::loadFile(const QString &fileName) {
+	std::cout<<"mainwindow loadFile : "<<fileName.toStdString()<<std::endl;
 	if(!mainView->loadImageList(fileName)) {
             statusBar()->showMessage("Load failed!", 2000);
             return false;
     }
-    setCurrentFile(fileName);
-    statusBar()->showMessage("File loaded", 2000);
+   // setCurrentFile(fileName);
+   // statusBar()->showMessage("File loaded", 2000);
     //resize(mainView->view->size());
     return true;
 }

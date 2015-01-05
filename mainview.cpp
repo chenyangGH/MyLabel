@@ -20,6 +20,7 @@
 #include <QtGui>
 #include "picview.h"
 #include "mainview.h"
+#include "DirectorySearch.h"
 
 #include <stdio.h>
 #include <iostream>
@@ -127,16 +128,19 @@ void MainView::on_makeSureButton_clicked()
 	cout<<"leftup_X: "<<leftUp.x()<<"   leftUp_Y: "<<leftUp.y()<<endl;
 	cout<<"rightDown_X: "<<rightDown.x()<<"   rightDown_Y: "<<rightDown.y()<<endl;
 	*/
-	view->computeArc();
+	view->computeArc(curFile);
 	if(fileList.empty())
 	{
-		std::cout<<"last image in this directory"<<endl;
 		makeSureButton->setEnabled(false);
+		std::cout<<"last image in this directory"<<endl;
+		return;
 	}
 	else
 	{
 		std::string fileName = fileList.back();
+		curFile = QFileInfo(fileName.c_str()).fileName();
 		fileList.pop_back();
+		view->cleanUp();
 		view->loadImage((char*)fileName.c_str());
 	}
 }
@@ -170,19 +174,30 @@ void MainView::enableButtons() {
 	makeSureButton->setEnabled(true);
 }
 
-bool MainView::loadImageList(QString directoryName) {
+bool MainView::loadImageList(const QString &directoryName) {
 	bool result = false;
 	////////////////////////////////
-	loadImage();
+	SearchPic spic;
+	spic.List_Files((directoryName.toStdString()).c_str(), 0);
+/*
+	fileList.reserve((spic.Paths).size());
+	copy((spic.Paths).begin(), (spic.Paths).end(), fileList.begin());
+	*/
+	fileList.clear();
+	for(std::vector<std::string>::iterator it = (spic.Paths).begin(); it != (spic.Paths).end(); it++)
+	{
+		std::cout<<(*it)<<std::endl;
+		fileList.push_back(*it);
+	}
 	////////////////////////////////
 	if(fileList.empty())
 	{
 		std::cout<<"there is no image in this directory"<<endl;
 		return false;
 	}
-	fullFileName = fileList.back();
+	std::string fullFileName = fileList.back();
 	fileList.pop_back();
-	curFile = QFileInfo(fullFileName).fileName();
-	result = view->loadImage(fullFileName);
+	curFile = QFileInfo(fullFileName.c_str()).fileName();
+	result = view->loadImage(fullFileName.c_str());
 	return result;
 }

@@ -21,7 +21,7 @@
 #define MAINVIEW_H
 
 #include <QWidget>
-
+#include <vector>
 class PicView;
 class QPushButton;
 class QHBoxLayout;
@@ -38,7 +38,7 @@ class MainView : public QWidget
     friend class MainWindow;
 public:
     MainView(QWidget *parent);
-    bool loadImageList(QString directoryName);
+    bool loadImageList(const QString &directoryName);
 
 
 public slots:
@@ -74,7 +74,7 @@ private:
     QVBoxLayout *leftLayout;
     QHBoxLayout *mainLayout;
     QTabWidget *bottomBox;
-	vector<std::string> fileList;
+	std::vector<std::string> fileList;
 };
 
 #endif // MAINVIEW_H

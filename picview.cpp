@@ -33,6 +33,7 @@ PicView::PicView(QWidget *parent) : QWidget(parent)
 
 UiCurve* PicView::addCurve()
 {
+	emit PicFound();
 	UiCurve* curve = new UiCurve(this);
 	curve->hide();
 	connect(this, SIGNAL(hasBeenResized(QSize)), curve, SLOT(callToResize(QSize)));
@@ -63,6 +64,7 @@ void PicView::delCurve(UiCurve* curve)
 
 UiRectangle* PicView::addRectangle()
 {
+	emit PicFound();
 	rectangle = new UiRectangle(this, QPointF(0.0, 0.0), QPointF(0.0,0.0));
 	rectangle->hide();
 	rectangle->LeftUpRect() = new UiRectangle(this, QPointF(0.0, 0.0), QPointF(0.0, 0.0));
@@ -145,8 +147,12 @@ void PicView::delPara()
 {
 }
 
-int PicView::doCompute(QWidget *pWidget, char *fileName)
+int PicView::doCompute(QWidget *pWidget,const char *fileName)
 {
+#if 0
+	std::cout<<fileName<<endl;
+	return 1;
+#endif
 	if(fileName == NULL)
 	{
 		cout<<"fileName is a null string"<<endl;
@@ -190,27 +196,42 @@ int PicView::doCompute(QWidget *pWidget, char *fileName)
 		}
 	}
 	fclose(out);
+	return 1;
 }
 
-void PicView::computeArc()
+void PicView::computeArc(const QString &filename)
 {
-	/*
+	cout<<"image name is: "<<filename.toStdString()<<std::endl;
+
+	int index = 1;	
+	char appendix[5] = {'.','t','x','t','\0'};
 	for(std::vector<UiRectangle*>::iterator it = rectangleVector.begin(); it != rectangleVector.end(); it++)
 	{
-		if(doCompute(*it, name) == 0)
+		std::string file;
+		file += filename.toStdString().substr(0, filename.length() - 4);
+		file += '_';
+		file += ((index - 1) + '1');
+		file += appendix;
+		if(doCompute(*it, file.c_str()) == 0)
 		{
 			exit(0);
 		}
+		index++;
 	}
 
 	for(std::vector<UiCurve*>::iterator it = curveVector.begin(); it != curveVector.end(); it++)
 	{
-		if(doCompute(*it, name) == 0)
+		std::string file;
+		file += filename.toStdString().substr(0, filename.length() - 4);
+		file += '_';
+		file += ((index - 1) + '1');
+		file += appendix;
+		if(doCompute(*it, file.c_str()) == 0)
 		{
 			exit(0);
 		}
+		index++;
 	}
-	*/
 }
 /*
 void PicView::computeArc()
